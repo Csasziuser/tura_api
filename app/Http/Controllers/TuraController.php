@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Tura;
 class TuraController extends Controller
 {
     /**
@@ -19,7 +19,23 @@ class TuraController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "nev"=> "required|string|max:50",
+            "tav"=> "required|integer|min:1",
+            "elerheto_hely" => "required|integer"
+        ], [
+            "required"=>":attribute mező kötelező!",
+            "integer"=>":attribute mezőnek számnak kell lennie!",
+            "string" => ":attribute mezőnek szövegnek kell lennie!",
+            "min"=>":attribute mezőnek minimum :min hosszúnak kell lennie",
+            "max" => ":attribute mező maximum :max hosszú lehet"
+        ]);
+        Tura::create([
+            "nev"=>$request->nev,
+            "tav" => $request->tav,
+            "elerheto_hely" => $request->elerheto_hely
+        ]);
+        return response()->json(["uzenet" => "Túra rögzítve!"],201,options:JSON_UNESCAPED_UNICODE);
     }
 
     /**
