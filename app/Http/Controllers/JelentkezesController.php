@@ -19,7 +19,22 @@ class JelentkezesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "tura_id"=>"required|integer|exists:turak,id",
+            "email"=>"required|email",
+            "letszam"=>"required|integer|min:1"
+        ],
+        [
+            "required"=>":attribute megadása kötelező.",
+            "integer"=>":attribute mező csak szám lehet.",
+            "exists"=>"Ilyen túra nem létezik.",
+            "min"=>"Minimum 1 létszám.",
+            "email"=>"Hibás email formátum."
+        ]);
+
+        Jelentkezes::create(["tura_id"=>$request->tura_id, "email"=>$request->email, "letszam"=>$request->letszam]);
+
+        
     }
 
     /**
