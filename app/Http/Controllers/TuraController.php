@@ -11,7 +11,8 @@ class TuraController extends Controller
      */
     public function index()
     {
-        //
+        $turak = Tura::all();
+        return response()->json($turak, 200, options:JSON_UNESCAPED_UNICODE );
     }
 
     /**
