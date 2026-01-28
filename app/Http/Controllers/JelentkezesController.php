@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Jelentkezes;
 
 class JelentkezesController extends Controller
 {
@@ -34,7 +35,7 @@ class JelentkezesController extends Controller
 
         Jelentkezes::create(["tura_id"=>$request->tura_id, "email"=>$request->email, "letszam"=>$request->letszam]);
 
-        
+        return response()->json("Sikeres jelentkezés!",201,options:JSON_UNESCAPED_UNICODE);
     }
 
     /**
