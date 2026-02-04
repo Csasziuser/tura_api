@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Jelentkezes;
+use App\Models\Tura;
 
 class JelentkezesController extends Controller
 {
@@ -12,7 +13,8 @@ class JelentkezesController extends Controller
      */
     public function index()
     {
-        //
+        $valtozo = Jelentkezes::with("tura") -> get();
+        return response() -> json($valtozo, 200, options:JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -33,6 +35,13 @@ class JelentkezesController extends Controller
             "email"=>"Hibás email formátum."
         ]);
 
+        $tura_valtozo = Tura::find($request->tura_id);
+        if ($tura_valtozo->elerheto_hely - $request->letszam > 0){
+            $tura_valtozo->elerheto_hely -= $request->letszam;
+            $tura_valtozo->save();
+        }else{
+            return response()->json("Sikertelen jelentkezés létszámtúllépés miatt:(!",422,options:JSON_UNESCAPED_UNICODE);
+        }
         Jelentkezes::create(["tura_id"=>$request->tura_id, "email"=>$request->email, "letszam"=>$request->letszam]);
 
         return response()->json("Sikeres jelentkezés!",201,options:JSON_UNESCAPED_UNICODE);
