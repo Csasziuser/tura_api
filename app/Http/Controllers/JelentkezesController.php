@@ -68,6 +68,18 @@ class JelentkezesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $jelentkezes = Jelentkezes::find($id);
+
+        if (!$jelentkezes) {
+            $tura = Tura::find($jelentkezes->tura_id);
+            $tura->elerheto_hely += $jelentkezes->letszam;
+            $tura->save();
+        }
+        else {
+            return response()->json("Nincs ilyen jelentkezés!",404, options:JSON_UNESCAPED_UNICODE);
+        }
+
+        $jelentkezes->delete();
+        return response()->json("Jelentkezés törölve!",204, options:JSON_UNESCAPED_UNICODE);
     }
 }
